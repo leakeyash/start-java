@@ -1,10 +1,13 @@
 package io;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author henry
@@ -18,6 +21,7 @@ public class FileObject {
         createFiles(Paths.get(dir,"sub").toString());
         List<File> files = getAllFiles(dir);
         printMaxMinFileNames(files);
+        testSplitMergeFile();
     }
 
     private static void printMaxMinFileNames(List<File> files) {
@@ -86,11 +90,56 @@ public class FileObject {
             n--;
         }
     }
-
-   /* private static void getMaxMinFiles(){
-        File file = new File("C:\\WINDOWS");
-        for(File f: file.listFiles()){
-            f.
+    private static boolean createFile(String filePath, byte[] data){
+        File file = Paths.get(filePath).toFile();
+        if(file.getParentFile().exists() || file.getParentFile().mkdirs()){
+            try(FileOutputStream fos = new FileOutputStream(file)){
+                fos.write(data);
+            } catch (IOException e){
+                e.printStackTrace();
+                return false;
+            }
         }
-    }*/
+        return true;
+    }
+
+    private static void testSplitMergeFile(){
+        String filePath = "F:\\test\\henry\\file\\log.txt";
+        byte[] bytes = new byte[2135*1024];
+        for(int i=0;i<bytes.length;i++){
+            bytes[i] = (byte)new Random().nextInt(10);
+        }
+        createFile(filePath,bytes);
+        splitFile(filePath);
+        mergeFile(Paths.get(filePath).getParent().toString(),"log.txt");
+    }
+
+    private static void splitFile(String filePath){
+        int count =0;
+        int interval = 100 * 1024;
+        int len;
+        try(FileInputStream fis = new FileInputStream(filePath)){
+            byte[] bytes = new byte[interval];
+            while((len=fis.read(bytes))!=-1){
+                createFile(filePath+"-"+count, Arrays.copyOfRange(bytes,0,len-1));
+                count++;
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    private static void mergeFile(String dir, String name){
+        List<File> files = Arrays.stream(Paths.get(dir).toFile().listFiles())
+                .filter(x->x.getName().startsWith(name)&&!x.getName().equals(name))
+                .sorted().collect(Collectors.toList());
+        try(FileOutputStream fos = new FileOutputStream(Paths.get(dir,name+"-new").toFile(),true)) {
+            for (File f : files) {
+                fos.write(Files.readAllBytes(f.toPath()));
+            }
+        }
+        catch (IOException e){
+            e.printStackTrace();
+        }
+    }
 }
