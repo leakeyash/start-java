@@ -1,8 +1,10 @@
 package com.leakeyash.aspect.concert;
 
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
+/**
+ * @author henry
+ */
 @Component
 public class Singer implements Performance {
     @Override
