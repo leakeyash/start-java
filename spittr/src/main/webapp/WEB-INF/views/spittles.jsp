@@ -13,13 +13,15 @@
 </head>
 <body>
 <c:forEach items="${spittleList}" var ="spittle">
-    <div>
-        <c:out value="${spittle.message}"/>
-    </div>
-    <div>
-        <span><c:out value="{spittle.time}"></c:out></span>
-        <span></span>
-    </div>
-</c:forEach>>
+    <li>
+        <div>
+            <c:out value="${spittle.message}"/>
+        </div>
+        <div>
+            <span><c:out value="${spittle.time}"/></span>
+            <span></span>
+        </div>
+    </li>
+</c:forEach>
 </body>
 </html>
