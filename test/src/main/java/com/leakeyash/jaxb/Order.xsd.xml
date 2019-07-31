@@ -1,0 +1,14 @@
+<Order>
+  <OrderNo>string</OrderNo>
+  <OrderDateTime>2008-09-29T09:49:45</OrderDateTime>
+  <CustomerName>string</CustomerName>
+  <OrderItems>
+    <!--1 or more repetitions:-->
+    <Produdct>
+      <ProductNo>string</ProductNo>
+      <ProductName>string</ProductName>
+      <Price>1.5E2</Price>
+      <Amount>3</Amount>
+    </Produdct>
+  </OrderItems>
+</Order>
