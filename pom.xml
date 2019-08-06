@@ -19,6 +19,7 @@
         <module>start-api</module>
         <module>test</module>
         <module>start-netty</module>
+        <module>start-cloud</module>
     </modules>
 
 </project>
